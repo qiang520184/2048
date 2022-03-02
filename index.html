@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index.css">
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+
+      .box {
+        width: 460px;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 100px 100px 100px 100px;
+        grid-gap: 20px 20px;
+        justify-items: center;
+        align-items: center;
+        border: 1px solid red;
+        /* grid-template-rows: 1fr 1fr 1fr 1fr; */
+      }
+
+      .item {
+        width: 100px;
+        height: 100px;
+        text-align: center;
+        line-height: 100px;
+        font-weight: bold;
+        border: 1px solid yellow;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="box" id="box">
+        <div class="item">1</div>
+        <div class="item">1</div>
+        <div class="item">1</div>
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">2</div>
+        <div class="item">2</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">3</div>
+        <div class="item">3</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">4</div>
+        <div class="item">4</div>
+        <div class="item">4</div>
+      </div>
+
+      <div class="control" id="control">
+        <div data-type="top">上</div>
+        <div data-type="bottom">下</div>
+        <div data-type="left">左</div>
+        <div data-type="right">右</div>
+      </div>
+
+
+
+    </div>
+    <script src="./index.js"></script>
+
+    <script>
+      let boxDom = document.getElementById('box');
+      let controlDom = document.getElementById('control');
+      let client = new game({ dom: boxDom, render });
+      console.log(client.data)
+
+      render(client.data);
+
+
+      controlDom.addEventListener('click', function (e) {
+        client.updated(e.target.dataset.type)
+      })
+      function render(data) {
+        let dom = '';
+        data.forEach(element => {
+          // console.log(element, element.length, 'element')
+          dom += `<div class="item">${element || ''}</div>`
+        });
+        boxDom.innerHTML = dom;
+      }
+
+    </script>
+  </body>
+
+</html>
