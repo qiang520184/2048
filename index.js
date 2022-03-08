@@ -42,13 +42,13 @@ class game {
 
     this.updatedView();
   }
-  updated(value) {
-    console.log(value);
+  updated(type) {
+    console.log(type);
     // 合并数值 视图更新
     console.log(this)
-    switch (value) {
+    switch (type) {
       case 'top':
-
+        console.log(this.data)
         break;
       case 'right':
 
@@ -62,11 +62,77 @@ class game {
 
       default:
         break;
+
     }
-    // 添加新随机数
-    if (this.emptySum()) {
-      this.setValue(this.randomOption())
+    let newData = [...this.data];
+    console.log(this.data, 'data')
+    let newList = [];
+    this.data.forEach((item, index) => {
+      if (item) {
+        console.log(this.getDirectionValue(type, index))
+      }
+
+      // newData[]
+      // console.log(item, value, index)
+    })
+    // // 添加新随机数
+    // if (this.emptySum()) {
+    //   this.setValue(this.randomOption())
+    // }
+
+  }
+  top(item, cloumes, index) {
+    if (item) {
+      cpmspe
+    } else {
+
     }
+  }
+
+  // 方向类型 当前下标返回 对应信息
+  getDirectionValue(type, index) {
+    let mergeFlag;
+    let itemIndex;
+    let data = this.data;
+
+    function deepIndex(type, index) {
+      console.log(type, index, 'deepIndex')
+      switch (type) {
+        case 'top':
+          itemIndex = index >= 4 ? index - 4 : index;
+          break;
+        case 'right':
+          itemIndex = index % 4 === 3 ? index - 4 : index + 1;
+          break;
+        case 'bottom':
+          itemIndex = index >= data.length - 4 ? index % 4 : index + 4;
+          console.log(itemIndex, data[itemIndex], data[index])
+          if (!data[itemIndex] && index < data.length - 4 ) {
+            deepIndex(type, itemIndex)
+            console.log(data[itemIndex], itemIndex, '11')
+            debugger
+          }
+          break;
+        case 'left':
+          itemIndex = index % 4 === 0 ? index + 4 : index - 1;
+          break;
+        default:
+          break;
+      }
+    }
+    deepIndex(type, index)
+    console.log(itemIndex, 'itemIndex')
+    // let oldValue = this.data[itemIndex];
+    // let newValue = this.data[index];
+    // let merge = Boolean(oldValue === newValue && oldValue && newValue);
+    // return {
+    //   type,
+    //   index,
+    //   itemIndex,
+    //   merge,
+    //   oldValue,
+    //   newValue
+    // }
 
   }
   updatedView() {
