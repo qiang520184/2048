@@ -27,7 +27,7 @@ class game {
   }
   initStart() {
     // 开始随机出三个数字
-    this.setValue(this.randomOption())
+    // this.setValue(this.randomOption())
     // console.log(this.data, this.data, this.ramdom, this.ramdomNumber())
     // this.data[this.ramdom] = this.ramdomNumber()
   }
@@ -46,39 +46,30 @@ class game {
     console.log(type);
     // 合并数值 视图更新
     console.log(this)
-    switch (type) {
-      case 'top':
-        console.log(this.data)
-        break;
-      case 'right':
 
-        break;
-      case 'bottom':
-
-        break;
-      case 'left':
-
-        break;
-
-      default:
-        break;
-
-    }
     let newData = [...this.data];
     console.log(this.data, 'data')
     let newList = [];
     this.data.forEach((item, index) => {
       if (item) {
+        let { itemIndex, newValue, oldValue, merge } = this.getDirectionValue(type, index);
         console.log(this.getDirectionValue(type, index))
+        newData[index] = 0
+        newData[itemIndex] = merge ? newValue + oldValue : newValue
       }
 
       // newData[]
       // console.log(item, value, index)
     })
+
+    this.data = newData;
+
+    this.updatedView();
+    console.log(newData, 'newData')
     // // 添加新随机数
-    // if (this.emptySum()) {
-    //   this.setValue(this.randomOption())
-    // }
+    if (this.emptySum()) {
+      this.setValue(this.randomOption())
+    }
 
   }
   top(item, cloumes, index) {
@@ -92,29 +83,36 @@ class game {
   // 方向类型 当前下标返回 对应信息
   getDirectionValue(type, index) {
     let mergeFlag;
-    let itemIndex;
+    let itemIndex = 0;
     let data = this.data;
 
     function deepIndex(type, index) {
       console.log(type, index, 'deepIndex')
       switch (type) {
         case 'top':
-          itemIndex = index >= 4 ? index - 4 : index;
+          itemIndex = index > 3 ? index - 4 : index;
+
+          if (!data[itemIndex] && itemIndex > 3) {
+            deepIndex(type, itemIndex)
+          }
           break;
         case 'right':
           itemIndex = index % 4 === 3 ? index - 4 : index + 1;
+          if (!data[itemIndex] && itemIndex % 4 < 3) {
+            deepIndex(type, itemIndex)
+          }
           break;
         case 'bottom':
           itemIndex = index >= data.length - 4 ? index % 4 : index + 4;
-          console.log(itemIndex, data[itemIndex], data[index])
-          if (!data[itemIndex] && index < data.length - 4 ) {
+          if (!data[itemIndex] && itemIndex < data.length - 3) {
             deepIndex(type, itemIndex)
-            console.log(data[itemIndex], itemIndex, '11')
-            debugger
           }
           break;
         case 'left':
-          itemIndex = index % 4 === 0 ? index + 4 : index - 1;
+          itemIndex = index ? index % 4 === 0 ? index : index - 1 : index;
+          if (!data[itemIndex] && itemIndex % 4 !== 0 && itemIndex) {
+            deepIndex(type, itemIndex)
+          }
           break;
         default:
           break;
@@ -122,17 +120,17 @@ class game {
     }
     deepIndex(type, index)
     console.log(itemIndex, 'itemIndex')
-    // let oldValue = this.data[itemIndex];
-    // let newValue = this.data[index];
-    // let merge = Boolean(oldValue === newValue && oldValue && newValue);
-    // return {
-    //   type,
-    //   index,
-    //   itemIndex,
-    //   merge,
-    //   oldValue,
-    //   newValue
-    // }
+    let oldValue = this.data[itemIndex];
+    let newValue = this.data[index];
+    let merge = Boolean(oldValue === newValue && oldValue && newValue && itemIndex !== index);
+    return {
+      type,
+      index,
+      itemIndex,
+      merge,
+      oldValue,
+      newValue
+    }
 
   }
   updatedView() {
